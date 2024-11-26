@@ -28,7 +28,7 @@ if (version_compare($latest_version, $current_version, '<=')) {
 }
 
 // 获取更新包下载链接
-$update_package_url = 'https://update.aiqji.cn/update_package.zip';
+$update_package_url = 'https://update.aiqji.cn/uploads/update_package.zip';
 
 // 下载更新包
 $update_package_path = __DIR__ . '/update_package.zip';
