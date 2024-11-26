@@ -27,7 +27,13 @@ if (!isset($_SESSION['id']) || $_SESSION['id'] !== $shared_by) {
     exit;
 }
 
-require_once 'includes/db.php'; // 引入数据库连接
+require_once 'includes/// 创建 PDO 连接
+try {
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("数据库连接失败：" . $e->getMessage());
+}'; // 引入数据库连接
 include 'config.php';
 include 'record_share_function.php'; // 包含上面定义的 recordShare 函数
 

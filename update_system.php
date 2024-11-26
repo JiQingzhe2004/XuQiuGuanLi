@@ -95,8 +95,19 @@ if ($zip->open($update_package_path) === TRUE) {
     // 可以通过写入到config.php或其他方式更新版本
     // 示例（请确保config.php具有写入权限和正确的格式）：
     $config_file = __DIR__ . '/version.php';
+    
+    // 创建临时文件
+    $temp_config_file = tempnam(sys_get_temp_dir(), 'version');
+    
     $new_config = "<?php\n\$current_version = '{$latest_version}';\n?>";
-    file_put_contents($config_file, $new_config);
+    if (file_put_contents($temp_config_file, $new_config) === false) {
+        die("无法写入临时 version 文件");
+    }
+    
+    // 使用临时文件替换目标文件
+    if (!rename($temp_config_file, $config_file)) {
+        die("无法替换 $config_file 文件");
+    }
     
     echo "系统更新成功！当前版本：{$latest_version}";
     // 可选：重启服务或进行其他操作
