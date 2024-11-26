@@ -7,13 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // 设置文件路径
     $config_file = 'config.php';
-    $db_file = 'includes/// 创建 PDO 连接
-try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("数据库连接失败：" . $e->getMessage());
-}';
+    $db_file = 'includes/db.php';
     
     // 检查文件是否存在
     if (!file_exists($config_file)) {
@@ -25,13 +19,7 @@ try {
     
     // 输出文件权限以进行调试
     echo "config.php 当前权限: " . substr(sprintf('%o', fileperms($config_file)), -4) . "<br>";
-    echo "includes/// 创建 PDO 连接
-try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("数据库连接失败：" . $e->getMessage());
-} 当前权限: " . substr(sprintf('%o', fileperms($db_file)), -4) . "<br>";
+    echo "includes/db.php 当前权限: " . substr(sprintf('%o', fileperms($db_file)), -4) . "<br>";
 
     // 创建临时文件
     $temp_config_file = tempnam(sys_get_temp_dir(), 'config');
@@ -50,13 +38,7 @@ try {
         die("无法写入临时 config 文件");
     }
 
-    // 更新 includes/// 创建 PDO 连接
-try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("数据库连接失败：" . $e->getMessage());
-} 文件内容
+    // 更新 includes/db.php 文件内容
     $db_content = "<?php\n";
     $db_content .= "// 数据库配置\n";
     $db_content .= "\$host = '$servername'; // 数据库地址\n";
