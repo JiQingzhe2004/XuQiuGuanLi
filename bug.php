@@ -241,7 +241,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // 过滤并添加允许的文件
         files.forEach(file => {
-            const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'zip'];
+            const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'zip', 'json', 'csv', 'ppt', 'pptx'];
             const fileExtension = file.name.split('.').pop().toLowerCase();
             if (allowedExtensions.includes(fileExtension)) {
                 documentDT.items.add(file);

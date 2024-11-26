@@ -153,7 +153,7 @@ $conn->close();
 
         <div class="container">
             <div class="row mb-3 justify-content-center">
-                <div class="col-md-2 p-2 border bg-light rounded mb-3"><strong>医院名称：</strong><?php echo htmlspecialchars($request['title']); ?></div>
+                <div class="col-md-2 p-2 border bg-light rounded mb-3"><strong>BUG模块：</strong><?php echo htmlspecialchars($request['title']); ?></div>
                 <div class="col-md-2 p-2 border bg-light rounded mb-3"><strong>提交人：</strong><?php echo htmlspecialchars($request['name']); ?></div>
                 <div class="col-md-4 p-2 border bg-light rounded mb-3"><strong>提交时间：</strong><?php echo htmlspecialchars($request['created_at']); ?></div>
             </div>
