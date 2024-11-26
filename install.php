@@ -5,7 +5,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $dbname = $_POST['dbname'];
 
-    // 更新 config.php 文件
+    // 设置文件路径
+    $config_file = 'config.php';
+    $db_file = 'includes/db.php';
+    
+    // 检查文件是否存在
+    if (!file_exists($config_file)) {
+        die("文件 $config_file 不存在");
+    }
+    if (!file_exists($db_file)) {
+        die("文件 $db_file 不存在");
+    }
+    
+    // 输出文件权限以进行调试
+    echo "config.php 当前权限: " . substr(sprintf('%o', fileperms($config_file)), -4) . "<br>";
+    echo "includes/db.php 当前权限: " . substr(sprintf('%o', fileperms($db_file)), -4) . "<br>";
+
+    // 创建临时文件
+    $temp_config_file = tempnam(sys_get_temp_dir(), 'config');
+    $temp_db_file = tempnam(sys_get_temp_dir(), 'db');
+
+    // 更新 config.php 文件内容
     $config_content = "<?php\n";
     $config_content .= "// 数据库配置\n";
     $config_content .= "\$servername = '$servername'; // 数据库服务器地址\n";
@@ -13,9 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $config_content .= "\$password = '$password'; // 数据库密码\n";
     $config_content .= "\$dbname = '$dbname'; // 数据库名称\n";
     $config_content .= "?>\n";
-    file_put_contents('config.php', $config_content);
 
-    // 更新 includes/db.php 文件
+    if (file_put_contents($temp_config_file, $config_content) === false) {
+        die("无法写入临时 config 文件");
+    }
+
+    // 更新 includes/db.php 文件内容
     $db_content = "<?php\n";
     $db_content .= "// 数据库配置\n";
     $db_content .= "\$host = '$servername'; // 数据库地址\n";
@@ -30,8 +53,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $db_content .= "    die(\"数据库连接失败：\" . \$e->getMessage());\n";
     $db_content .= "}\n";
     $db_content .= "?>\n";
-    file_put_contents('includes/db.php', $db_content);
 
+    if (file_put_contents($temp_db_file, $db_content) === false) {
+        die("无法写入临时 db 文件");
+    }
+
+    // 使用临时文件替换目标文件
+    if (!rename($temp_config_file, $config_file)) {
+        die("无法替换 $config_file 文件");
+    }
+    if (!rename($temp_db_file, $db_file)) {
+        die("无法替换 $db_file 文件");
+    }
 
     // 检测数据库连接
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -39,88 +72,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("数据库连接失败: " . $conn->connect_error);
     }
 
-// 创建 users 表
-$sql = "
-create table if not exists users (
-	id int(11) not null auto_increment,
-	username varchar(255) not null,
-	password varchar(255) not null,
-	name varchar(255) not null,
-	role varchar(50) not null,
-	primary key (id)
-)";
-if ($conn->query($sql) === FALSE) {
-	die("创建 users 表失败: " . $conn->error);
-}
+    // 创建 users 表
+    $sql = "
+    create table if not exists users (
+        id int(11) not null auto_increment,
+        username varchar(255) not null,
+        password varchar(255) not null,
+        name varchar(255) not null,
+        role varchar(50) not null,
+        primary key (id)
+    )";
+    if ($conn->query($sql) === FALSE) {
+        die("创建 users 表失败: " . $conn->error);
+    }
 
-// 创建 requests 表
-$sql = "
-create table if not exists requests (
-	id int(11) not null auto_increment,
-	user_id int(11) not null,
-	name varchar(255) not null,
-	role varchar(50) not null,
-	title varchar(255) not null,
-	description text not null,
-	document_path json null default null,
-	image_path json null default null,
-	created_at timestamp null default current_timestamp,
-	processed tinyint(1) null default 0,
-	deleted tinyint(1) null default 0,
-	urgent enum('可延期', '一般', '紧急', '非常紧急') not null default '可延期',
-	is_configured enum('是', '否') not null default '否',
-	primary key (id)
-)";
-if ($conn->query($sql) === FALSE) {
-	die("创建 requests 表失败: " . $conn->error);
-}
+    // 创建 requests 表
+    $sql = "
+    create table if not exists requests (
+        id int(11) not null auto_increment,
+        user_id int(11) not null,
+        name varchar(255) not null,
+        role varchar(50) not null,
+        title varchar(255) not null,
+        description text not null,
+        document_path json null default null,
+        image_path json null default null,
+        created_at timestamp null default current_timestamp,
+        processed tinyint(1) null default 0,
+        deleted tinyint(1) null default 0,
+        urgent enum('可延期', '一般', '紧急', '非常紧急') not null default '可延期',
+        is_configured enum('是', '否') not null default '否',
+        primary key (id)
+    )";
+    if ($conn->query($sql) === FALSE) {
+        die("创建 requests 表失败: " . $conn->error);
+    }
 
-// 创建 bugs 表
-$sql = "
-create table if not exists bugs (
-	id int(11) not null auto_increment,
-	user_id int(11) not null,
-	name varchar(255) not null,
-	role varchar(50) not null,
-	title varchar(255) not null,
-	description text not null,
-	document_path json null default null,
-	image_path json null default null,
-	created_at timestamp null default current_timestamp,
-	processed tinyint(1) null default 0,
-	deleted tinyint(1) null default 0,
-	primary key (id)
-)";
-if ($conn->query($sql) === FALSE) {
-	die("创建 bugs 表失败: " . $conn->error);
-}
+    // 创建 bugs 表
+    $sql = "
+    create table if not exists bugs (
+        id int(11) not null auto_increment,
+        user_id int(11) not null,
+        name varchar(255) not null,
+        role varchar(50) not null,
+        title varchar(255) not null,
+        description text not null,
+        document_path json null default null,
+        image_path json null default null,
+        created_at timestamp null default current_timestamp,
+        processed tinyint(1) null default 0,
+        deleted tinyint(1) null default 0,
+        primary key (id)
+    )";
+    if ($conn->query($sql) === FALSE) {
+        die("创建 bugs 表失败: " . $conn->error);
+    }
 
-// 创建 shares 表
-$sql = "
-create table if not exists shares (
-	id int(11) not null auto_increment,
-	share_type varchar(50) not null,
-	share_id int(11) not null,
-	shared_by int(11) not null,
-	shared_at datetime not null,
-	primary key (id)
-)";
-if ($conn->query($sql) === FALSE) {
-	die("创建 shares 表失败: " . $conn->error);
-}
+    // 创建 shares 表
+    $sql = "
+    create table if not exists shares (
+        id int(11) not null auto_increment,
+        share_type varchar(50) not null,
+        share_id int(11) not null,
+        shared_by int(11) not null,
+        shared_at datetime not null,
+        primary key (id)
+    )";
+    if ($conn->query($sql) === FALSE) {
+        die("创建 shares 表失败: " . $conn->error);
+    }
 
-// 插入初始用户数据
-$sql = "
-insert into users (id, username, password, name, role)
-values
-(1, 'admin', '\$2y\$10\$moyyyV1rEzz7yIwK32xVvuN9nppJG8BKohBUo/Vl4RI4Tkp.z3vwO', '管理员', 'admin')
-on duplicate key update
-username = values(username), password = values(password), name = values(name), role = values(role)
-";
-if ($conn->query($sql) === FALSE) {
-	die("插入初始用户数据失败: " . $conn->error);
-}
-
+    // 插入初始用户数据
+    $sql = "
+    insert into users (id, username, password, name, role)
+    values
+    (1, 'admin', '\$2y\$10\$moyyyV1rEzz7yIwK32xVvuN9nppJG8BKohBUo/Vl4RI4Tkp.z3vwO', '管理员', 'admin')
+    on duplicate key update
+    username = values(username), password = values(password), name = values(name), role = values(role)
+    ";
+    if ($conn->query($sql) === FALSE) {
+        die("插入初始用户数据失败: " . $conn->error);
+    }
 
     echo "配置更新成功！5秒后跳转到首页...";
     echo "<div id='progress-container' class='progress mt-3'>
