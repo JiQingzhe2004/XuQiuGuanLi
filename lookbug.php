@@ -351,7 +351,7 @@ if ($request_result === false) {
             });
 
             // 定期获取最新的需求数据并更新页面内容
-            function fetchbugs() {
+            function fetchRequests() {
                 $.ajax({
                     url: 'fetch_bugs.php',
                     type: 'GET',
