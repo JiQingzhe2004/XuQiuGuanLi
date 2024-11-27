@@ -1,13 +1,6 @@
 <?php
 ob_start(); // 开启输出缓冲
 include 'header.php';
-// 创建 PDO 连接
-try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("数据库连接失败：" . $e->getMessage());
-}
 
 // 引入数据库配置
 include 'config.php';
