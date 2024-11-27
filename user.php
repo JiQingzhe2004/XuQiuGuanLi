@@ -1,15 +1,11 @@
 <?php
 include 'header.php';
-// 创建 PDO 连接
-try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("数据库连接失败：" . $e->getMessage());
-}
 
 // 引入数据库配置
 include 'config.php';
+
+// 引入版本信息
+include 'version.php';
 
 // 创建数据库连接
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -115,6 +111,9 @@ if ($user_info_result->num_rows > 0) {
     exit;
 }
 
+// 获取当前版本
+$current_version = defined('CURRENT_VERSION') ? CURRENT_VERSION : '未知版本';
+
 // 处理 POST 请求
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['change_password'])) {
@@ -200,11 +199,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </svg> 修改密码</button>
         </div>
     </div>
-    <div class="text-center mt-4"><!-- 获取更新按钮 -->
-    <button id="checkUpdateBtn" class="btn btn-primary">获取系统更新</button>
-    
-    <!-- 更新状态显示区域 -->
-    <div id="updateStatus" class="mt-3"></div></div>    
+    <div class="text-center mt-4">
+        <!-- 获取更新按钮 -->
+        <button id="checkUpdateBtn" class="btn btn-primary">获取系统更新</button>
+        
+        <!-- 更新状态显示区域 -->
+        <div id="updateStatus" class="mt-3">
+            <p>当前版本：<?php echo htmlspecialchars($current_version); ?></p>
+        </div>
+    </div>    
 
     <!-- 修改信息模态框 -->
     <div class="modal fade" id="updateInfoModal" tabindex="-1" aria-hidden="true">
