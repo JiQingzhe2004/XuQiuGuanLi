@@ -24,6 +24,11 @@ git clone https://gitee.com/jiqingzhe/XuQiuGuanLi.git
 
 然后输入MySQL数据库对应的信息，点击安装即可，安装完成后自动跳转至首页
 
+打开服务器，cd到网站根目录，更改uploads文件夹的权限为777
+
+```linux
+sudo chmod 777 uploads
+```
 ### 三、使用说明
 
 1、初始管理员账号：admin
