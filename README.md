@@ -49,67 +49,7 @@ sudo chmod 777 uploads
 
 ### 四、代码目录
 
-需求收集V1.0.0
-├─ bug.php
-├─ check_update.php
-├─ config.php
-├─ edit_bug.php
-├─ edit_request.php
-├─ fetch_bugs.php
-├─ fetch_requests.php
-├─ footer.php
-├─ header.php
-├─ index.php
-├─ install.php
-├─ LICENSE
-├─ list.txt
-├─ lookbug.php
-├─ lookxq.php
-├─ pl.php
-├─ README.md
-├─ record_share.php
-├─ record_share_function.php
-├─ search.php
-├─ submit.php
-├─ update_system.php
-├─ user.php
-├─ usergl.php
-├─ version.php
-├─ view_bug.php
-├─ view_bug_share.php
-├─ view_request.php
-├─ view_request_share.php
-├─ uploads
-│  ├─ images
-│  │  └─ 123.txt
-│  ├─ documents
-│  │  └─ 123.txt
-│  └─ bug
-│     ├─ images
-│     │  └─ 123.txt
-│     └─ documents
-│        └─ 123.txt
-├─ path
-│  ├─ zt
-│  │  ├─ douyuFont.otf
-│  │  └─ logo.otf
-│  ├─ to
-│  │  ├─ install.png
-│  │  └─ logo.png
-│  └─ doc
-│     └─ 血透2.0-医院名称-模块名称.docx
-├─ js
-│  ├─ bootstrap-datepicker.zh-CN.min.js
-│  ├─ bootstrap.bundle.min.js
-│  ├─ summernote-bs4.min.js
-│  └─ wangEditor.min.js
-├─ includes
-│  ├─ db.php
-│  └─ submit_request.php
-└─ css
-   ├─ bootstrap.min.css
-   └─ summernote-bs4.min.css
-
+点击查看：[代码目录](list.txt)
             
 
 
