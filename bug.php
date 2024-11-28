@@ -91,6 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=0.9">
     <title>提交BUG</title>
     <script src="js/wangEditor.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">

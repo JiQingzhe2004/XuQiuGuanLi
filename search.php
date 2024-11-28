@@ -118,7 +118,7 @@ while ($request = $result->fetch_assoc()) {
 $stmt->close();
 $conn->close();
 ?>
-
+<meta name="viewport" content="width=device-width,initial-scale=0.9">
 <style>
     /* 已有的样式 */
     .processed-row {

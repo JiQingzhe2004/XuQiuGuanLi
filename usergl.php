@@ -122,6 +122,7 @@ $user_result = $conn->query($user_query);
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=0.9">
     <title>用户管理</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <style>
